@@ -12,4 +12,13 @@
 4. Use `python3 solve.py --help` to see help about script's arguments
 
 ## Example of the valid run
-TODO
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/clone.png?raw=true)
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/solvepy.png?raw=true)
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/full_cloud.png?raw=true)
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/cuboid_3d.png?raw=true)
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/sphere.png?raw=true)
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/processed_img.png?raw=true)
+![alt text](https://github.com/iolkhovsky/lightcode_task/blob/master/resources/script_output.png?raw=true)
+
+
+
