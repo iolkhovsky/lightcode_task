@@ -4,8 +4,8 @@ import logging
 
 from numpy import save
 
-from utils.cloud import *
 from utils.image import *
+from utils.cloud import *
 from utils.common import *
 from utils.visualization import *
 
@@ -49,7 +49,7 @@ def run(args):
         fov=raw_data.fov,
         cam_axis_dir=args.camera_dir,
     )
-    visualize_cloud(cloud, savepath=join(args.output, "pointcloud.png"))
+    visualize_cloud(cloud, savepath=join(args.output, "pointcloud.png"), title="Full cloud")
     save_cloud_to_h5(cloud, path=join(args.output, "pointcloud.hdf5"))
 
     cloud_objects = clusterize_cloud(cloud)
@@ -64,7 +64,7 @@ def run(args):
             xyz, r = estimate_sphere_by_points(obj_cloud)
             area = sphere_area(r)
             volume = sphere_volume(r)
-        visualize_cloud(obj_cloud, savepath=join(args.output, f"{label}.png"))
+        visualize_cloud(obj_cloud, savepath=join(args.output, f"{label}.png"), title=label)
         save_cloud_to_h5(obj_cloud, path=join(args.output, f"{label}.hdf5"))
         logger.info(f"Detected object: {label}")
         logger.info(f"Centroid [xyz]: {xyz}")
@@ -75,11 +75,11 @@ def run(args):
     img = read_image(args.image_path)
     circles = detect_circles(img)
     assert len(circles) == 1
-    circle_area = circle_area(circles[0])
-    logger.info(f"Sphere main face area: {circle_area}")
+    circle_face_area = circle_area(circles[0])
+    logger.info(f"Sphere main face area: {circle_face_area}")
     processed_img = draw_circles(img, circles)
-    cuboid_face, cuboid_area = detect_cuboid_face(img)
-    logger.info(f"Cuboid main face area: {cuboid_area}")
+    cuboid_face, cuboid_face_area = detect_cuboid_face(img)
+    logger.info(f"Cuboid main face area: {cuboid_face_area}")
     processed_img = draw_contours(processed_img, cuboid_face)
     write_image(processed_img, join(args.output, "processed.jpg"))
 

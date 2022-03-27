@@ -33,9 +33,9 @@ def segment_cuboid_main_face(cv_img):
     mask = thresh1.astype(np.uint8) * 255
     num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(mask, 4, cv2.CV_32S)
     assert num_labels > 0
-    idx, area = max(enumerate(stats[1:]), key=lambda x: x[1][cv2.CC_STAT_AREA])
+    idx, stat = max(enumerate(stats[1:]), key=lambda x: x[1][cv2.CC_STAT_AREA])
     final_mask = labels == (idx + 1)
-    return (final_mask * 255).astype(np.uint8), area
+    return (final_mask * 255).astype(np.uint8), stat[cv2.CC_STAT_AREA]
 
 
 def detect_cuboid_face(cv_img):
@@ -45,4 +45,4 @@ def detect_cuboid_face(cv_img):
 
 
 def circle_area(circle):
-    return np.pin * circle[2] ** 2
+    return np.pi * circle[2] ** 2

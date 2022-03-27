@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def visualize_cloud(cloud, color="red", savepath=None):
+def visualize_cloud(cloud, color="red", savepath=None, title="Cloud"):
     fig = plt.figure(figsize=(10, 6)) 
+    fig.suptitle(title, fontsize=16)
     ax = fig.add_subplot(111, projection='3d') 
     ax.scatter(cloud[:, 0], cloud[:, 1], cloud[:, 2], c=color, alpha=0.5, s=0.25) 
 
