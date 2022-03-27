@@ -5,14 +5,16 @@ import logging
 from numpy import save
 
 from utils.cloud import *
-from utils.common import force_create_folder, remove_file
-from utils.visualization import visualize_cloud
+from utils.image import *
+from utils.common import *
+from utils.visualization import *
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Test task solver')
     parser.add_argument("--cloud_path", type=str, default=join("data", "cuboid-sphere.hdf5"))
     parser.add_argument("--camera_dir", nargs="+", type=float, default=[0.5, 0.5, 1.])
+    parser.add_argument("--image_path", type=str, default=join("data", "cuboid-sphere.png"))
     parser.add_argument("--output", type=str, default="output")
     return parser.parse_args()
 
@@ -68,6 +70,18 @@ def run(args):
         logger.info(f"Centroid [xyz]: {xyz}")
         logger.info(f"Surface area: {area}")
         logger.info(f"Volume: {volume}")
+    
+    logger.info("Task #2: image analysis")
+    img = read_image(args.image_path)
+    circles = detect_circles(img)
+    assert len(circles) == 1
+    circle_area = circle_area(circles[0])
+    logger.info(f"Sphere main face area: {circle_area}")
+    processed_img = draw_circles(img, circles)
+    cuboid_face, cuboid_area = detect_cuboid_face(img)
+    logger.info(f"Cuboid main face area: {cuboid_area}")
+    processed_img = draw_contours(processed_img, cuboid_face)
+    write_image(processed_img, join(args.output, "processed.jpg"))
 
 
 if __name__ == "__main__":
