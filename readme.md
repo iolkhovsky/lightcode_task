@@ -9,6 +9,7 @@
 `pip3 install -r requirements.txt`
 3. Run solution script and explore the results in solve.log and in an output folder
 `python3 solve.py`
+Computed values may be found in generated solve.log file. Generated files will be placed in output directory according --output argument value (default - "output" folder)
 4. Use `python3 solve.py --help` to see help about script's arguments
 
 ## Example of the valid run
