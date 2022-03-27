@@ -12,10 +12,14 @@ from utils.visualization import *
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Test task solver')
-    parser.add_argument("--cloud_path", type=str, default=join("data", "cuboid-sphere.hdf5"))
-    parser.add_argument("--camera_dir", nargs="+", type=float, default=[0.5, 0.5, 1.])
-    parser.add_argument("--image_path", type=str, default=join("data", "cuboid-sphere.png"))
-    parser.add_argument("--output", type=str, default="output")
+    parser.add_argument("--cloud_path", type=str, default=join("data", "cuboid-sphere.hdf5"),
+        help="Absolute path to the H5 file with depth & intensity maps")
+    parser.add_argument("--camera_dir", nargs="+", type=float, default=[0.5, 0.5, 1.],
+        help="List of 3 float numbers representing Camera axis direction in world coordinates")
+    parser.add_argument("--image_path", type=str, default=join("data", "cuboid-sphere.png"),
+        help="Absolute path to the png file with scene image")
+    parser.add_argument("--output", type=str, default="output",
+        help="Absolute path to the output folder (for generated artifacts)")
     return parser.parse_args()
 
 
