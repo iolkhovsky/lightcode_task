@@ -4,15 +4,17 @@ import logging
 
 from numpy import save
 
+from utils.image import *
 from utils.cloud import *
-from utils.common import force_create_folder, remove_file
-from utils.visualization import visualize_cloud
+from utils.common import *
+from utils.visualization import *
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Test task solver')
     parser.add_argument("--cloud_path", type=str, default=join("data", "cuboid-sphere.hdf5"))
     parser.add_argument("--camera_dir", nargs="+", type=float, default=[0.5, 0.5, 1.])
+    parser.add_argument("--image_path", type=str, default=join("data", "cuboid-sphere.png"))
     parser.add_argument("--output", type=str, default="output")
     return parser.parse_args()
 
@@ -47,7 +49,7 @@ def run(args):
         fov=raw_data.fov,
         cam_axis_dir=args.camera_dir,
     )
-    visualize_cloud(cloud, savepath=join(args.output, "pointcloud.png"))
+    visualize_cloud(cloud, savepath=join(args.output, "pointcloud.png"), title="Full cloud")
     save_cloud_to_h5(cloud, path=join(args.output, "pointcloud.hdf5"))
 
     cloud_objects = clusterize_cloud(cloud)
@@ -62,12 +64,24 @@ def run(args):
             xyz, r = estimate_sphere_by_points(obj_cloud)
             area = sphere_area(r)
             volume = sphere_volume(r)
-        visualize_cloud(obj_cloud, savepath=join(args.output, f"{label}.png"))
+        visualize_cloud(obj_cloud, savepath=join(args.output, f"{label}.png"), title=label)
         save_cloud_to_h5(obj_cloud, path=join(args.output, f"{label}.hdf5"))
         logger.info(f"Detected object: {label}")
         logger.info(f"Centroid [xyz]: {xyz}")
         logger.info(f"Surface area: {area}")
         logger.info(f"Volume: {volume}")
+    
+    logger.info("Task #2: image analysis")
+    img = read_image(args.image_path)
+    circles = detect_circles(img)
+    assert len(circles) == 1
+    circle_face_area = circle_area(circles[0])
+    logger.info(f"Sphere main face area: {circle_face_area}")
+    processed_img = draw_circles(img, circles)
+    cuboid_face, cuboid_face_area = detect_cuboid_face(img)
+    logger.info(f"Cuboid main face area: {cuboid_face_area}")
+    processed_img = draw_contours(processed_img, cuboid_face)
+    write_image(processed_img, join(args.output, "processed.jpg"))
 
 
 if __name__ == "__main__":
